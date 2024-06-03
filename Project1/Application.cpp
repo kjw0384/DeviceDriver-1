@@ -2,17 +2,20 @@
 
 class App {
 public:
+	const int ADDR_WRITE_START = 0x00;
+	const int ADDR_WRITE_END = 0x04;
+
 	App(DeviceDriver* input_driver) : driver(input_driver) {}
 	void ReadAndPrint(int startAddr, int endAddr) {
-		for (int i = startAddr; i <= endAddr; i++)
+		for (int iAddr = startAddr; iAddr <= endAddr; iAddr++)
 		{
-			driver->read(i);
+			driver->read(iAddr);
 		}
 	}
 
 	void WriteAll(int value) {
-		for (int i = 0; i <= 4; i++)
-			driver->write(i, value);
+		for (int iAddr = ADDR_WRITE_START; iAddr <= ADDR_WRITE_END; iAddr++)
+			driver->write(iAddr, value);
 	}
 private:
 	DeviceDriver* driver;

@@ -12,18 +12,12 @@ public:
 	MOCK_METHOD(void, write, (long, unsigned char), (override));
 };
 
-class MockDeviceDriver : public DeviceDriver {
-public:
-	MockDeviceDriver(FlashMemoryDevice* hardware) : DeviceDriver(hardware) {}
-	MOCK_METHOD(int, read, (long address), (override));
-	MOCK_METHOD(void, write, (long, int), (override));
-};
-
 class DeviceDriverFixture : public testing::Test {
 public:
 	MockFlashMemoryDevice mDevice;
 	DeviceDriver driver{ &mDevice };
 };
+
 //
 //TEST_F(DeviceDriverFixture, Read5Test) {
 //	EXPECT_CALL(mDevice, read(0))
@@ -58,11 +52,25 @@ public:
 //	driver.write(0, 'A');
 //}
 
-TEST(ApplicationTest, ReadAndPrint) {
+
+
+class MockDeviceDriver : public DeviceDriver {
+public:
+	MockDeviceDriver(FlashMemoryDevice* hardware) : DeviceDriver(hardware) {}
+	MOCK_METHOD(int, read, (long address), (override));
+	MOCK_METHOD(void, write, (long, int), (override));
+};
+
+class ApplicationFixture : public testing::Test {
+public:
 	MockFlashMemoryDevice mDevice;
 	MockDeviceDriver driver{ &mDevice };
 	App app{ &driver };
-	
+};
+
+
+TEST_F(ApplicationFixture, ReadAndPrint) {
+
 	EXPECT_CALL(driver, read(1))
 		.Times(1);
 	EXPECT_CALL(driver, read(2))
@@ -73,10 +81,7 @@ TEST(ApplicationTest, ReadAndPrint) {
 	app.ReadAndPrint(1, 3);
 }
 
-TEST(ApplicationTest, WriteAll) {
-	MockFlashMemoryDevice mDevice;
-	MockDeviceDriver driver{ &mDevice };
-	App app{ &driver };
+TEST_F(ApplicationFixture, WriteAll) {
 
 	EXPECT_CALL(mDevice, read)
 		.WillRepeatedly(Return(0xFF));
