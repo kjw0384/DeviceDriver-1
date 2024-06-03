@@ -7,16 +7,8 @@ using namespace testing;
 
 class MockFlashMemoryDevice : public FlashMemoryDevice {
 public:
-	// FlashMemoryDevice을(를) 통해 상속됨
-	//unsigned char read(long address) override
-	//{
-	//	return 0;
-	//}
-	void write(long address, unsigned char data) override
-	{
-	}
-
 	MOCK_METHOD(unsigned char, read, (long address), (override));
+	MOCK_METHOD(void, write, (long, unsigned char), (override));
 };
 
 TEST(DeviceDriverTest, Read5Test) {
@@ -41,3 +33,14 @@ TEST(DeviceDriverTest, ReadFail) {
 	DeviceDriver driver(&mDevice);
 	EXPECT_THROW(driver.read(0), ReadFailException);
 }
+
+TEST(DeviceDriverTest, WriteCheckCurrentWritten) {
+	MockFlashMemoryDevice mDevice;
+
+	EXPECT_CALL(mDevice, read(0))
+		.WillRepeatedly(Return(0));
+
+	DeviceDriver driver(&mDevice);
+	EXPECT_THROW(driver.write(0, 'A'), WriteFailException);
+}
+
