@@ -25,8 +25,8 @@ TEST(DeviceDriverTest, Read5Test) {
 	EXPECT_CALL(mDevice, read(0))
 		.Times(5);
 
-	DeviceDriver d(&mDevice);
-	d.read(0);
+	DeviceDriver driver(&mDevice);
+	driver.read(0);
 }
 
 TEST(DeviceDriverTest, ReadFail) {
@@ -38,6 +38,6 @@ TEST(DeviceDriverTest, ReadFail) {
 		.WillOnce(Return(1))
 		.WillRepeatedly(Return(0));
 
-	DeviceDriver d(&mDevice);
-	EXPECT_THROW(d.read(0), ReadFailException);
+	DeviceDriver driver(&mDevice);
+	EXPECT_THROW(driver.read(0), ReadFailException);
 }
