@@ -1,5 +1,13 @@
 #include "DeviceDriver.h"
 #include "windows.h"
+#include <stdexcept>
+#include <iostream>
+
+using namespace std;
+
+class ReadFailException : public exception {
+
+};
 
 DeviceDriver::DeviceDriver(FlashMemoryDevice* hardware) : m_hardware(hardware)
 {}
@@ -16,7 +24,7 @@ int DeviceDriver::read(long address)
         nReadValue = (int)(m_hardware->read(address));
 
         if (nReturn != nReadValue)
-            return -1;
+            throw ReadFailException();
     }
     return nReturn;
 }

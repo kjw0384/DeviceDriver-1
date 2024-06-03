@@ -3,6 +3,7 @@
 #include "../Project1/DeviceDriver.cpp"
 #include "../Project1/FlashMemoryDevice.h"
 
+using namespace testing;
 
 class MockFlashMemoryDevice : public FlashMemoryDevice {
 public:
@@ -26,4 +27,17 @@ TEST(DeviceDriverTest, Read5Test) {
 
 	DeviceDriver d(&mDevice);
 	d.read(0);
+}
+
+TEST(DeviceDriverTest, ReadFail) {
+	MockFlashMemoryDevice mDevice;
+
+	EXPECT_CALL(mDevice, read(0))
+		.WillOnce(Return(0))
+		.WillOnce(Return(0))
+		.WillOnce(Return(1))
+		.WillRepeatedly(Return(0));
+
+	DeviceDriver d(&mDevice);
+	EXPECT_THROW(d.read(0), ReadFailException);
 }
