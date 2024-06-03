@@ -65,9 +65,9 @@ TEST(ApplicationTest, ReadAndPrint) {
 	
 	EXPECT_CALL(driver, read(1))
 		.Times(1);
-	EXPECT_CALL(driver, read(3))
-		.Times(1);
 	EXPECT_CALL(driver, read(2))
+		.Times(1);
+	EXPECT_CALL(driver, read(3))
 		.Times(1);
 	
 	app.ReadAndPrint(1, 3);
