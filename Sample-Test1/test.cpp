@@ -18,7 +18,7 @@ public:
 	MOCK_METHOD(unsigned char, read, (long address), (override));
 };
 
-TEST(FlashMemoryTest, ReadTest) {
+TEST(DeviceDriverTest, Read5Test) {
 	MockFlashMemoryDevice mDevice;
 
 	EXPECT_CALL(mDevice, read(0))
