@@ -10,6 +10,10 @@ public:
 		}
 	}
 
+	void WriteAll(int value) {
+		for (int i = 0; i <= 4; i++)
+			driver->write(i, value);
+	}
 private:
 	DeviceDriver* driver;
 };

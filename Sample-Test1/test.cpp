@@ -72,3 +72,25 @@ TEST(ApplicationTest, ReadAndPrint) {
 	
 	app.ReadAndPrint(1, 3);
 }
+
+TEST(ApplicationTest, WriteAll) {
+	MockFlashMemoryDevice mDevice;
+	MockDeviceDriver driver{ &mDevice };
+	App app{ &driver };
+
+	EXPECT_CALL(mDevice, read)
+		.WillRepeatedly(Return(0xFF));
+
+	EXPECT_CALL(driver, write(0, 5))
+		.Times(1);
+	EXPECT_CALL(driver, write(1, 5))
+		.Times(1);
+	EXPECT_CALL(driver, write(2, 5))
+		.Times(1);
+	EXPECT_CALL(driver, write(3, 5))
+		.Times(1);
+	EXPECT_CALL(driver, write(4, 5))
+		.Times(1);
+
+	app.WriteAll(5);
+}
