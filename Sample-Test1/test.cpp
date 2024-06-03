@@ -44,3 +44,14 @@ TEST(DeviceDriverTest, WriteCheckCurrentWritten) {
 	EXPECT_THROW(driver.write(0, 'A'), WriteFailException);
 }
 
+TEST(DeviceDriverTest, WriteNormal) {
+	MockFlashMemoryDevice mDevice;
+
+	EXPECT_CALL(mDevice, read(0))
+		.WillRepeatedly(Return(0xFF));
+	EXPECT_CALL(mDevice, write)
+		.Times(1);
+
+	DeviceDriver driver(&mDevice);
+	driver.write(0, 'A');
+}
